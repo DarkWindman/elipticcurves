@@ -60,10 +60,10 @@ public class Curves {
         {
             if(P == Inf) return Q;
             else if(Q == Inf) return P;
-            BigInteger u1 = Q.y.multiply(P.z);
-            BigInteger u2 = P.y.multiply(Q.z);
-            BigInteger v1 = Q.x.multiply(P.z);
-            BigInteger v2 = P.x.multiply(Q.z);
+            BigInteger u1 = Q.y.multiply(P.z).mod(p);
+            BigInteger u2 = P.y.multiply(Q.z).mod(p);
+            BigInteger v1 = Q.x.multiply(P.z).mod(p);
+            BigInteger v2 = P.x.multiply(Q.z).mod(p);
             if(v1.equals(v2))
             {
                 if(!u1.equals(u2)) return Inf;
@@ -72,13 +72,32 @@ public class Curves {
             BigInteger u = u1.subtract(u2).mod(p);
             BigInteger v = v1.subtract(v2).mod(p);
             BigInteger w = P.z.multiply(Q.z);
-            BigInteger A = ((u.modPow(BigInteger.TWO, p).multiply(w.modPow(BigInteger.TWO, p))).subtract(v.modPow(BigInteger.valueOf(3), p))).subtract(BigInteger.TWO.multiply(v.modPow(BigInteger.TWO, p)).multiply(v2)).mod(p);
+            BigInteger A = ((u.modPow(BigInteger.TWO, p).multiply(w)).subtract(v.modPow(BigInteger.valueOf(3), p))).subtract(BigInteger.TWO.multiply(v.modPow(BigInteger.TWO, p)).multiply(v2)).mod(p);
             BigInteger x3 = v.multiply(A).mod(p);
             BigInteger y3 = u.multiply((v.modPow(BigInteger.TWO, p).multiply(v2)).subtract(A)).subtract(v.modPow(BigInteger.valueOf(3), p).multiply(u2)).mod(p);
             BigInteger z3 = v.modPow(BigInteger.valueOf(3), p).multiply(w).mod(p);
             return new DotsGroup(x3, y3, z3);
         }
 
+        public DotsGroup ScalarMultipliacationMontgomery(DotsGroup P, BigInteger scalar)
+        {
+            DotsGroup r0 = Inf;
+            DotsGroup r1 = P;
+            String bitsline = scalar.toString(2);
+            for (int i = 0; i < bitsline.length() ; i++)
+            {
+                if(bitsline.charAt(i) - 48 == 0)
+                {
+                    r1 = PointsAdd(r0,r1);
+                    r0 = PointDouble(r0);
+                }
+                else {
+                    r0 = PointsAdd(r0, r1);
+                    r1 = PointDouble(r1);
+                }
+            }
+            return r0;
+        }
 
     }
 
@@ -95,9 +114,13 @@ public class Curves {
         P.IsPoint(E.p, E.a, E.b, P.x, P.y);
         DotsGroup DoubleP = P.PointDouble(P);
         System.out.println(DoubleP.x + " " + DoubleP.y + " " + DoubleP.z);
+
         Curves.DotsGroup Q = E.new DotsGroup(BigInteger.valueOf(2),BigInteger.valueOf(9), BigInteger.ONE);
         DotsGroup PSumQ = P.PointsAdd(P, Q);
         System.out.println(PSumQ.x + " " + PSumQ.y + " " + PSumQ.z);
-        int scalar = 8;
+
+        BigInteger scalar = new BigInteger("8", 10);
+        DotsGroup Pscalar = P.ScalarMultipliacationMontgomery(P, scalar);
+        System.out.println(Pscalar.x + " " + Pscalar.y + " " + Pscalar.z);
     }
 }
