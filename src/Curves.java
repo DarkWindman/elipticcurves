@@ -128,7 +128,7 @@ public class Curves {
         public void ToProjective(BigInteger x, BigInteger y, BigInteger z)
         {
             System.out.println("P = (" + x.multiply(z.modInverse(p)).mod(p).toString(16) + ", " + y.multiply(z.modInverse(p)).mod(p).toString(16) + ", " + z.toString(16) + ")");
-            IsPoint(new DotsGroup(x.multiply(z.modInverse(p)).mod(p), y.multiply(z.modInverse(p)).mod(p), z));
+            IsPoint(new DotsGroup(x.multiply(z.modInverse(p)).mod(p),y.multiply(z.modInverse(p)).mod(p), z));
         }
 
         public void Pointsout()
