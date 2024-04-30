@@ -52,9 +52,9 @@ public class Curves {
 
         public void IsPoint (DotsGroup P)
         {
-            BigInteger ysq= ((P.x.modPow(BigInteger.valueOf(3),p)).add(a.multiply(P.x))).add(b);
+            BigInteger ysq= ((P.x.modPow(BigInteger.valueOf(3),p)).add(a.multiply(P.x).multiply(P.z.modPow(BigInteger.TWO, p)))).add(b.multiply(P.z.modPow(BigInteger.valueOf(3), p)));
             ysq = ysq.mod(p);
-            if(ysq.equals(P.y.modPow(BigInteger.TWO,p))) System.out.println("Consist");
+            if(ysq.equals(P.y.modPow(BigInteger.TWO,p).multiply(P.z).mod(p))) System.out.println("Consist");
             else System.out.println("OOPS... NOT Consist");
         }
 

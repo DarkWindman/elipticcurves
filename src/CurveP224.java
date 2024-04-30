@@ -24,6 +24,7 @@ public class CurveP224 {
         Curves.DotsGroup P = Base.ScalarMultipliacationMontgomery(Base, k);
         P.Pointsout();
         P.ToAffine(P);
+        P.IsPoint(P);
         Curves.DotsGroup kP = P.ScalarMultipliacationMontgomery(P, n);
         kP.Pointsout();
         kP.ToAffine(kP);
