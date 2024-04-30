@@ -121,18 +121,18 @@ public class Curves {
         {
             if(P == Inf) System.out.println("P = Oe");
             else {
-                System.out.println("P = (" + P.x.multiply(P.z.modInverse(p)).mod(p) + ", " + P.y.multiply(P.z.modInverse(p)).mod(p) + ")");
+                System.out.println("P = (" + P.x.multiply(P.z.modInverse(p)).mod(p).toString(16) + ", " + P.y.multiply(P.z.modInverse(p)).mod(p).toString(16) + ")");
             }
         }
 
         public void ToProjective(BigInteger x, BigInteger y, BigInteger z)
         {
-            System.out.println("P = (" + x.multiply(z.modInverse(p)).mod(p) + ", " + y.multiply(z.modInverse(p)).mod(p) + ", " + z + ")");
+            System.out.println("P = (" + x.multiply(z.modInverse(p)).mod(p).toString(16) + ", " + y.multiply(z.modInverse(p)).mod(p).toString(16) + ", " + z.toString(16) + ")");
         }
 
         public void Pointsout()
         {
-            System.out.println("P = (" + x + ", " + y + ", " + z + ")");
+            System.out.println("P = (" + x.toString(16) + ", " + y.toString(16) + ", " + z.toString(16) + ")");
         }
     }
 }
