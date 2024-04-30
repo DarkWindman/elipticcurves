@@ -1,7 +1,4 @@
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.Scanner;
 
 public class Curves {
     private BigInteger p;
@@ -14,7 +11,7 @@ public class Curves {
         this.a = a;
         this.b = b;
     }
-    private static BigInteger BlumBlumaBits(BigInteger r1, BigInteger p) {
+    static BigInteger BlumBlumaBits(BigInteger r1, BigInteger p) {
         String bits = p.toString(2);
         StringBuilder blbl = new StringBuilder("1");
         StringBuilder temp = new StringBuilder();
@@ -41,21 +38,13 @@ public class Curves {
         BigInteger result = new BigInteger(blbl.toString(), 2);
         return result;
     }
-    private DotsGroup Inf = new DotsGroup(BigInteger.ZERO,BigInteger.ONE,BigInteger.ZERO);
+    private final DotsGroup Inf = new DotsGroup(BigInteger.ZERO,BigInteger.ONE,BigInteger.ZERO);
     public class DotsGroup{
         private BigInteger x;
         private BigInteger y;
         private BigInteger z;
         public DotsGroup(BigInteger x, BigInteger y, BigInteger z)
         {
-            /*if(z.equals(BigInteger.ONE)) {
-                this.x = x;
-                this.y = y;
-            }
-            else {
-                this.x = x.multiply(z.modInverse(p)).mod(p);
-                this.y = y.multiply(z.modInverse(p)).mod(p);
-            }*/
             this.x = x;
             this.y = y;
             this.z = z;
@@ -145,33 +134,5 @@ public class Curves {
         {
             System.out.println("P = (" + x + ", " + y + ", " + z + ")");
         }
-    }
-
-
-    public static void main(String[] args) throws Exception {
-        BigInteger p = new BigInteger("ffffffffffffffffffffffffffffffff000000000000000000000001", 16);
-        BigInteger a = new BigInteger("fffffffffffffffffffffffffffffffefffffffffffffffffffffffe", 16);
-        BigInteger b = new BigInteger("b4050a850c04b3abf54132565044b0b7d7bfd8ba270b39432355ffb4", 16);
-        BigInteger n = new BigInteger("ffffffffffffffffffffffffffff16a2e0b8f03e13dd29455c5c2a3d", 16);
-
-        Random rand = new Random();
-        int len = rand.nextInt(63) + 2;
-        BigInteger res = new BigInteger(len, rand);
-        //System.out.println("The random BigInteger = " + res);
-
-        Curves E = new Curves(p,a,b);
-        Curves.DotsGroup Base = E.new DotsGroup(new BigInteger("b70e0cbd6bb4bf7f321390b94a03c1d356c21122343280d6115c1d21", 16), new BigInteger("bd376388b5f723fb4c22dfe6cd4375a05a07476444d5819985007e34", 16), BigInteger.ONE);
-
-        Base.IsPoint(Base);
-
-        System.out.println("Lets generate our new point P = kBase");
-        BigInteger k = BlumBlumaBits(res, n);
-        System.out.println(" k = " + k.toString(16));
-        DotsGroup P = Base.ScalarMultipliacationMontgomery(Base, k);
-        P.Pointsout();
-        P.ToAffine(P);
-        DotsGroup kP = P.ScalarMultipliacationMontgomery(P, n);
-        kP.Pointsout();
-        kP.ToAffine(kP);
     }
 }
